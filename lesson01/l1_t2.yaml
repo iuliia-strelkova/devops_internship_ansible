@@ -1,0 +1,24 @@
+---
+- name: Lesson_1_task_2
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Uninstall httpd
+    yum:
+      name: httpd
+      state: absent
+
+  - name: Delete file index.html with data
+    file:
+      path:  "/var/www/html/index.html"
+      state: absent
+
+  - name: Close 80 and 443 port
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: yes
+      state: disabled
+    with_items:
+      - 80/tcp
+      - 443/tcp

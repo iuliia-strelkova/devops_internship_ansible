@@ -1,0 +1,30 @@
+---
+- name: Lesson_1_task_1
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Install httpd
+    yum:
+      name: httpd
+      state: latest
+
+  - name: Start & Enable httpd
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+
+  - name: Create file index.html with data
+    copy:
+      dest:  "/var/www/html/index.html"
+      content: "Welcome to my web server"
+
+  - name: Open 80 and 443 port
+    ansible.posix.firewalld:
+      port: "{{ item }}"
+      permanent: yes
+      state: enabled
+    with_items:
+      - 80/tcp
+      - 443/tcp

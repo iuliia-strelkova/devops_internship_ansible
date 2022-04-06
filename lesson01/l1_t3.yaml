@@ -1,0 +1,14 @@
+---
+- name: Lesson_1_task_3
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Change grub settings
+    lineinfile:
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX="'
+      line: GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"
+
+  - name: Save changes
+    shell: grub2-mkconfig    
